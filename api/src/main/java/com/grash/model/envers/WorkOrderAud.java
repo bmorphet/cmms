@@ -93,6 +93,10 @@ public class WorkOrderAud implements Serializable {
     @JoinColumn(name = "parent_preventive_maintenance_id")
     private PreventiveMaintenance parentPreventiveMaintenance;
 
+    @ManyToOne
+    @JoinColumn(name = "parent_work_order_meter_trigger_id")
+    private WorkOrderMeterTrigger parentWorkOrderMeterTrigger;
+
     // Include fields for _MOD columns
 
     @ManyToOne
@@ -162,6 +166,8 @@ public class WorkOrderAud implements Serializable {
     @Column(name = "parentPreventiveMaintenance_MOD")
     private Boolean parentPreventiveMaintenanceIdMod;
 
+    @Column(name = "parentWorkOrderMeterTrigger_MOD")
+    private Boolean parentWorkOrderMeterTriggerIdMod;
 
     @Column(name = "asset_MOD")
     private Boolean assetIdMod;
@@ -230,6 +236,10 @@ public class WorkOrderAud implements Serializable {
         if (parentPreventiveMaintenanceIdMod != null && parentPreventiveMaintenanceIdMod) {
             summary.append("Parent Preventive Maintenance: ").append(parentPreventiveMaintenance == null ? "N/A" :
                     parentPreventiveMaintenance.getName()).append(separator);
+        }
+        if (parentWorkOrderMeterTriggerIdMod != null && parentWorkOrderMeterTriggerIdMod) {
+            summary.append("Parent Work Order Meter Trigger: ").append(parentWorkOrderMeterTrigger == null ? "N/A" :
+                    parentWorkOrderMeterTrigger.getName()).append(separator);
         }
         if (assetIdMod != null && assetIdMod) {
             summary.append("Asset: ").append(asset == null ? "N/A" : asset.getName()).append(separator);

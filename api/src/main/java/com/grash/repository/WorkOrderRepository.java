@@ -22,6 +22,10 @@ public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long>, Jpa
 
     Page<WorkOrder> findByParentPreventiveMaintenance_Id(Long id, Pageable pageable);
 
+    Optional<WorkOrder> findFirstByParentWorkOrderMeterTrigger_IdOrderByCreatedAtDesc(Long id);
+
+    boolean existsByParentWorkOrderMeterTrigger_Id(Long id);
+
     Collection<WorkOrder> findByPrimaryUser_Id(Long id);
 
     Collection<WorkOrder> findByCompletedBy_Id(Long id);

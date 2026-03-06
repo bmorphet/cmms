@@ -205,6 +205,15 @@ public class WorkOrderService {
                 Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
+    public Optional<WorkOrder> findLastByMeterTrigger(Long id) {
+        return workOrderRepository.findFirstByParentWorkOrderMeterTrigger_IdOrderByCreatedAtDesc(id);
+    }
+
+    public boolean existsByMeterTrigger(Long id) {
+        return workOrderRepository.existsByParentWorkOrderMeterTrigger_Id(id);
+    }
+
+
     public Collection<WorkOrder> findByLocation(Long id) {
         return workOrderRepository.findByLocation_Id(id);
     }

@@ -56,6 +56,25 @@ export default function EditTriggerModal({
       required: true
     },
     {
+      name: 'recurrent',
+      type: 'switch',
+      label: 'Recurrent',
+      midWidth: true
+    },
+    {
+      name: 'waitBefore',
+      type: 'number',
+      label: 'Wait before (' + t('days') + ')' ,
+      midWidth: true,
+      relatedFields: [
+        {
+          field: 'recurrent',
+          value: false,
+          hide: true
+        }
+      ]
+    },
+    {
       name: 'workOrderConfig',
       type: 'titleGroupField',
       label: t('wo_configuration')
@@ -73,6 +92,7 @@ export default function EditTriggerModal({
     name: Yup.string().required(t('Trequired_trigger_name')),
     title: Yup.string().required(t('required_wo_title')),
     value: Yup.number().required(t('required_value')),
+    waitBefore: Yup.number().min(0, t('invalid_frequency')),
     triggerCondition: Yup.object().required(t('required_trigger_condition'))
   };
   const formatValues = (values) => {
@@ -85,6 +105,8 @@ export default function EditTriggerModal({
     newValues.assignedTo = formatSelectMultiple(newValues.assignedTo);
     newValues.priority = newValues.priority?.value;
     newValues.triggerCondition = newValues.triggerCondition.value;
+    newValues.recurrent = Boolean(newValues.recurrent);
+    newValues.waitBefore = Number(newValues.waitBefore ?? 0);
     return newValues;
   };
   return (

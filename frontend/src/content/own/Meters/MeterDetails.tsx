@@ -276,7 +276,11 @@ export default function MeterDetails(props: MeterDetailsProps) {
                           trigger.triggerCondition === 'MORE_THAN'
                             ? t('greater_than')
                             : t('lower_than')
-                        } ${trigger.value} ${meter.unit}`}
+                        } ${trigger.value} ${meter.unit} · ${
+                          trigger.recurrent
+                            ? `Recurring (wait: ${trigger.waitBefore} ${t('days')})`
+                            : 'One-time'
+                        }`}
                       />
                     </ListItem>
                   ))}

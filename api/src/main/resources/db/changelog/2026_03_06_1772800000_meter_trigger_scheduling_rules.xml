@@ -1,0 +1,26 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2026_03_06_1772800000_1" author="codex">
+        <addColumn tableName="work_order">
+            <column name="parent_work_order_meter_trigger_id" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="work_order"
+                baseColumnNames="parent_work_order_meter_trigger_id"
+                constraintName="fk_work_order_parent_meter_trigger"
+                referencedTableName="work_order_meter_trigger"
+                referencedColumnNames="id"
+                onDelete="SET NULL"/>
+    </changeSet>
+
+    <changeSet id="2026_03_06_1772800000_2" author="codex">
+        <addColumn tableName="work_order_aud">
+            <column name="parent_work_order_meter_trigger_id" type="bigint"/>
+            <column name="parentWorkOrderMeterTrigger_MOD" type="boolean" defaultValueBoolean="false"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -71,6 +71,11 @@ public class WorkOrder extends WorkOrderBase {
     @Schema(implementation = IdDTO.class)
     private PreventiveMaintenance parentPreventiveMaintenance;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+    @Schema(implementation = IdDTO.class)
+    private WorkOrderMeterTrigger parentWorkOrderMeterTrigger;
+
     @NotAudited
     private Date firstTimeToReact;
 
@@ -114,4 +119,3 @@ public class WorkOrder extends WorkOrderBase {
                 completionTimes.stream().mapToLong(value -> value).sum() / completionTimes.size();
     }
 }
-

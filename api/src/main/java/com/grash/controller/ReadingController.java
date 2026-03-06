@@ -87,11 +87,28 @@ public class ReadingController {
                             locale));
                 }
                 if (error) {
-                    notificationService.createMultiple(meter.getUsers().stream().map(user1 ->
-                            new Notification(message.toString(), user1, NotificationType.METER, meter.getId())
-                    ).collect(Collectors.toList()), true, title);
-                    WorkOrder workOrder = workOrderService.getWorkOrderFromWorkOrderBase(meterTrigger);
-                    workOrderService.create(workOrder, user.getCompany());
+                    boolean shouldCreateWorkOrder = true;
+                    if (!meterTrigger.isRecurrent()) {
+                        shouldCreateWorkOrder = !workOrderService.existsByMeterTrigger(meterTrigger.getId());
+                    } else if (meterTrigger.getWaitBefore() > 0) {
+                        Optional<WorkOrder> optionalLastTriggerWorkOrder =
+                                workOrderService.findLastByMeterTrigger(meterTrigger.getId());
+                        if (optionalLastTriggerWorkOrder.isPresent()) {
+                            Date nextAllowedDate = Helper.incrementDays(
+                                    optionalLastTriggerWorkOrder.get().getCreatedAt(),
+                                    meterTrigger.getWaitBefore());
+                            shouldCreateWorkOrder = !new Date().before(nextAllowedDate);
+                        }
+                    }
+
+                    if (shouldCreateWorkOrder) {
+                        notificationService.createMultiple(meter.getUsers().stream().map(user1 ->
+                                new Notification(message.toString(), user1, NotificationType.METER, meter.getId())
+                        ).collect(Collectors.toList()), true, title);
+                        WorkOrder workOrder = workOrderService.getWorkOrderFromWorkOrderBase(meterTrigger);
+                        workOrder.setParentWorkOrderMeterTrigger(meterTrigger);
+                        workOrderService.create(workOrder, user.getCompany());
+                    }
                 }
             });
             return readingService.create(readingReq);
